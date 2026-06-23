@@ -29,12 +29,6 @@ interface TtsSettings {
   autoSaveAudio: boolean;
 }
 
-// 音色选项接口（显式定义，避免类型推断报错）
-interface VoiceOption {
-  label: string;
-  value: number;
-}
-
 @Entry
 @Component
 struct Index {
@@ -66,14 +60,6 @@ struct Index {
     saveHistory: true,
     autoSaveAudio: false
   };
-
-  // 音色选项列表（使用 VoiceOption[] 类型）
-  private voiceOptions: VoiceOption[] = [
-    { label: '标准女声', value: 0 },
-    { label: '标准男声', value: 1 },
-    { label: '可爱童声', value: 2 },
-    { label: '磁性大叔', value: 3 }
-  ];
 
   aboutToAppear() {
     this.initVisualizationData();
@@ -499,33 +485,6 @@ struct Index {
                 .width(40)
             }
             .width('100%')
-
-            // 音色选择（新增）
-            Row({ space: 10 }) {
-              Text("🎤 音色:")
-                .fontSize(this.getFontSize() - 2)
-                .fontColor(this.isDarkMode ? Color.White : '#333')
-                .width(60)
-
-              Row({ space: 4 }) {
-                ForEach(this.voiceOptions, (option: VoiceOption) => {
-                  Button({ type: ButtonType.Normal, stateEffect: true }) {
-                    Text(option.label)
-                      .fontSize(this.getFontSize() - 3)
-                      .fontColor(this.settings.person === option.value ? Color.White : '#333')
-                  }
-                  .backgroundColor(this.settings.person === option.value ? '#317AE7' : (this.isDarkMode ? '#444' : '#E0E0E0'))
-                  .borderRadius(this.getBorderRadius() - 2)
-                  .height(this.getButtonHeight() - 5)
-                  .layoutWeight(1)
-                  .onClick(() => {
-                    this.settings.person = option.value;
-                  })
-                })
-              }
-              .layoutWeight(1)
-            }
-            .width('100%')
           }
           .width('100%')
           .padding(this.getSpacing())
@@ -685,7 +644,7 @@ struct Index {
                 if (this.isPlaying) {
                   this.stopPlaying();
                 } else {
-                  this.startPlaying();
+                  this.startPlaying();5
                 }
               })
             }
@@ -719,7 +678,6 @@ struct Index {
                 this.settings.speed = 1.0;
                 this.settings.volume = 1.0;
                 this.settings.pitch = 1.0;
-                this.settings.person = 0; // 重置音色为默认
                 promptAction.showToast({
                   message: '参数已重置',
                   duration: 1000
